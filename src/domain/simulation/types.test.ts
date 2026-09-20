@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  ConfidenceComponentsSchema,
   DomainIssueSchema,
   ModelCapabilitiesSchema,
   ProvenanceSchema,
@@ -67,6 +68,33 @@ describe('DomainIssueSchema', () => {
   })
 })
 
+describe('confidence components', () => {
+  it('represents separate component confidence and an overall value', () => {
+    expect(
+      ConfidenceComponentsSchema.parse({
+        weather: 0.9,
+        geometry: 0.8,
+        outdoorModel: 0.7,
+        overall: 0.75,
+      }),
+    ).toEqual({
+      weather: 0.9,
+      geometry: 0.8,
+      outdoorModel: 0.7,
+      overall: 0.75,
+    })
+  })
+
+  it('rejects invalid component confidence', () => {
+    expect(() =>
+      ConfidenceComponentsSchema.parse({
+        geometry: -0.1,
+        overall: 0.5,
+      }),
+    ).toThrow()
+  })
+})
+
 describe('model capabilities', () => {
   it('defines the explicit wind-driven v1 capability boundary', () => {
     expect(ModelCapabilitiesSchema.parse(WIND_DRIVEN_V1_CAPABILITIES)).toEqual({
@@ -82,6 +110,11 @@ describe('model capabilities', () => {
     const result = SimulationMetaSchema.parse({
       modelVersions: { outdoorWind: 'outdoor-wind-v1' },
       capabilities: WIND_DRIVEN_V1_CAPABILITIES,
+      confidence: {
+        geometry: 1,
+        outdoorModel: 1,
+        overall: 1,
+      },
       issues: [],
     })
 
