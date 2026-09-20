@@ -3,6 +3,7 @@ import {
   CanonicalLocalPolygonSchema,
   LocalPolygonSchema,
   canonicalizePolygonWinding,
+  hasSelfIntersection,
   signedPolygonAreaSquareMeters,
 } from './types'
 
@@ -29,6 +30,27 @@ describe('local polygon contract', () => {
         { xMeters: 2, yMeters: 0 },
       ]),
     ).toThrow()
+  })
+
+  it('detects non-adjacent edge self-intersection', () => {
+    const bowTie = [
+      { xMeters: 0, yMeters: 0 },
+      { xMeters: 4, yMeters: 4 },
+      { xMeters: 0, yMeters: 4 },
+      { xMeters: 4, yMeters: 0 },
+    ]
+
+    expect(hasSelfIntersection(bowTie)).toBe(true)
+    expect(() => LocalPolygonSchema.parse(bowTie)).toThrow(
+      /must not self-intersect/,
+    )
+  })
+
+  it('does not treat adjacent shared vertices as self-intersection', () => {
+    expect(hasSelfIntersection(counterClockwiseSquare)).toBe(false)
+    expect(LocalPolygonSchema.parse(counterClockwiseSquare)).toEqual(
+      counterClockwiseSquare,
+    )
   })
 
   it('requires counter-clockwise canonical winding', () => {
