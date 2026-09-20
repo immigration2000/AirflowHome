@@ -4,56 +4,50 @@
 M0.7 — Provider Feasibility Spike
 
 ## Status
-M0.6 Validation/Snapshot gate passed in GitHub Actions. Versioned deterministic debug snapshots, replay integrity checks, self-intersection validation, confidence components, explicit simulation time context, and sensitivity foundations are implemented.
+M0.6 Validation/Snapshot gate passed. Initial M0.7 desk research is documented in `docs/PROVIDERS.md`. Production provider selection is intentionally still open because representative live-key sample testing has not yet been completed.
 
 ## Completed
 - reproducible npm/CI foundation verified,
 - M0.4 runtime/domain contracts implemented and tested,
 - M0.5 provider-free Wind / Geometry Lab implemented,
-- versioned Wind Lab snapshot schema v1 added,
-- canonical deterministic JSON serialization added,
-- snapshot/model versions separated,
-- unsupported snapshot versions fail explicitly,
-- imported snapshots replay normalized input and reject mismatched derived results,
-- explicit simulation time + timezone preserved in snapshots,
-- component confidence representation added,
-- polygon self-intersection detection added,
-- deterministic sensitivity/invariant tests added,
-- developer snapshot JSON export added to Wind Lab,
-- snapshot privacy/versioning rules documented.
+- M0.6 versioned deterministic snapshots and geometry validation implemented,
+- candidate address/map/building/weather/air-quality providers researched from official sources,
+- current quota/cost/license signals recorded where officially available,
+- fallback/manual-correction paths identified,
+- Kakao cache-policy constraints recorded,
+- Juso coordinate CRS/rate-limit/missing-coordinate behavior recorded,
+- GIS Building Integrated Information identified as the primary building-footprint candidate,
+- BuildingHUB identified as the primary height/floor metadata candidate,
+- KMA Short-term Forecast identified as the primary weather candidate,
+- AirKorea classified as an optional recommendation-layer provider rather than physics input.
 
 ## Current Task
-**PROVIDER-001 — Run M0.7 Provider Feasibility Spike**
+**PROVIDER-001 — Complete live provider feasibility validation**
 
-Evaluate candidate Korean data sources for:
-- address → coordinates,
-- building footprint,
-- building height / floor / use metadata where available,
-- current/forecast weather wind,
-- air quality where relevant.
+Desk research is complete enough to define the live tests. Remaining work:
 
-For each provider record:
-- coverage and sample quality,
-- fields and unit/time semantics,
-- missing-field behavior,
-- quota and cost,
-- licensing / attribution / commercial-use constraints,
-- caching / storage / redistribution rules,
-- freshness expectations,
-- fallback/manual correction path.
+1. obtain/enable development access for the candidate APIs,
+2. run sanitized representative apartment/building samples,
+3. prove a stable GIS Building Integrated Information ↔ BuildingHUB join,
+4. verify WFS CRS/geometry/freshness in live responses,
+5. confirm KMA `VEC` direction semantics from current official guide/sample,
+6. record practical request limits and missing-field behavior,
+7. confirm provider-specific persistent-cache/redistribution rules before implementation.
+
+See `docs/PROVIDERS.md`.
 
 ## Exit Criteria
-M0.7 must satisfy the Provider Feasibility gate in `docs/MILESTONE_GATES.md` before production map/weather/building provider architecture is chosen.
+M0.7 remains open until the Provider Feasibility gate in `docs/MILESTONE_GATES.md` is satisfied. Desk research alone is not sufficient.
 
 ## Next Task
 After M0.7 passes:
 
 **M1 — Basic Wind Map**
 
-Build the map/address shell and mock wind overlay using only provider choices justified by the feasibility spike.
+Build the map/address shell and mock wind overlay using only provider choices justified by the completed feasibility spike.
 
 ## Do Not Start Yet
-- production provider integration before the feasibility decision,
+- production provider integration before live feasibility validation,
 - surrounding-building physics,
 - floorplan work,
 - indoor airflow,
@@ -64,4 +58,5 @@ Build the map/address shell and mock wind overlay using only provider choices ju
 - repository-level branch protection/ruleset still needs to be enabled in GitHub settings,
 - local geographic projection is not implemented yet,
 - no production provider has been selected yet,
+- live provider sample coverage has not been tested because project development keys/approvals are not present in the repository,
 - current physics remains direction/geometry validation only; facade pressure/shielding/wake models are not implemented.
