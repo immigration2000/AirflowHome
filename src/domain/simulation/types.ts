@@ -69,10 +69,22 @@ export const WIND_DRIVEN_V1_CAPABILITIES = Object.freeze({
   mechanicalHvac: false,
 })
 
+export const ConfidenceComponentsSchema = z
+  .object({
+    weather: ConfidenceSchema.optional(),
+    geometry: ConfidenceSchema.optional(),
+    unit: ConfidenceSchema.optional(),
+    outdoorModel: ConfidenceSchema.optional(),
+    indoorModel: ConfidenceSchema.optional(),
+    overall: ConfidenceSchema,
+  })
+  .strict()
+
 export const SimulationMetaSchema = z
   .object({
     modelVersions: ModelVersionsSchema,
     capabilities: ModelCapabilitiesSchema,
+    confidence: ConfidenceComponentsSchema,
     issues: z.array(DomainIssueSchema),
   })
   .strict()
@@ -83,4 +95,5 @@ export type DomainIssueKind = z.infer<typeof DomainIssueKindSchema>
 export type DomainIssue = z.infer<typeof DomainIssueSchema>
 export type ModelVersions = z.infer<typeof ModelVersionsSchema>
 export type ModelCapabilities = z.infer<typeof ModelCapabilitiesSchema>
+export type ConfidenceComponents = z.infer<typeof ConfidenceComponentsSchema>
 export type SimulationMeta = z.infer<typeof SimulationMetaSchema>

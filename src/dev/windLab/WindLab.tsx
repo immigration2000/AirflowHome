@@ -5,6 +5,10 @@ import {
   getWindLabScenario,
   WIND_LAB_SCENARIOS,
 } from './scenarios'
+import {
+  createWindLabSnapshot,
+  serializeWindLabSnapshot,
+} from './snapshot'
 
 const SVG_WIDTH = 640
 const SVG_HEIGHT = 460
@@ -42,6 +46,11 @@ export default function WindLab() {
   const [scenarioId, setScenarioId] = useState(initialScenario.id)
   const [windFromDeg, setWindFromDeg] = useState(initialScenario.windFromDeg)
   const [speedMps, setSpeedMps] = useState(initialScenario.speedMps)
+  const [snapshotSimulationAt] = useState(() => new Date().toISOString())
+  const [snapshotTimeZone] = useState(
+    () => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+  )
+  const [copyStatus, setCopyStatus] = useState('')
 
   const scenario = useMemo(() => getWindLabScenario(scenarioId), [scenarioId])
 
@@ -53,6 +62,32 @@ export default function WindLab() {
         speedMps,
       }),
     [scenario, windFromDeg, speedMps],
+  )
+
+  const snapshotJson = useMemo(
+    () =>
+      serializeWindLabSnapshot(
+        createWindLabSnapshot({
+          windFromDeg,
+          speedMps,
+          polygon: scenario.polygon,
+          simulationTime: {
+            simulationAt: snapshotSimulationAt,
+            timeZone: snapshotTimeZone,
+          },
+          confidence: {
+            geometry: 1,
+            overall: 1,
+          },
+        }),
+      ),
+    [
+      scenario.polygon,
+      snapshotSimulationAt,
+      snapshotTimeZone,
+      speedMps,
+      windFromDeg,
+    ],
   )
 
   const polygonPoints = derived.polygon
@@ -78,6 +113,16 @@ export default function WindLab() {
     setScenarioId(next.id)
     setWindFromDeg(next.windFromDeg)
     setSpeedMps(next.speedMps)
+    setCopyStatus('')
+  }
+
+  async function copySnapshot() {
+    try {
+      await navigator.clipboard.writeText(snapshotJson)
+      setCopyStatus('Copied')
+    } catch {
+      setCopyStatus('Copy unavailable — select the JSON manually')
+    }
   }
 
   return (
@@ -87,7 +132,7 @@ export default function WindLab() {
           <a className="back-link" href="/">
             ← AirflowHome
           </a>
-          <p className="eyebrow">M0.5 · Developer Tool</p>
+          <p className="eyebrow">M0.6 · Developer Validation Tool</p>
           <h1>Wind / Geometry Lab</h1>
           <p>
             Provider-free verification surface for meteorological wind direction,
@@ -315,6 +360,33 @@ export default function WindLab() {
             </span>
           </div>
         </section>
+      </section>
+
+      <section className="lab-panel snapshot-panel">
+        <div className="panel-heading">
+          <div>
+            <h2>Deterministic debug snapshot</h2>
+            <p>
+              Versioned normalized input/result metadata. Re-exporting the same
+              snapshot produces the same canonical JSON.
+            </p>
+          </div>
+          <button className="copy-button" type="button" onClick={copySnapshot}>
+            Copy snapshot
+          </button>
+        </div>
+        <div className="snapshot-meta">
+          <span>simulationAt: {snapshotSimulationAt}</span>
+          <span>timeZone: {snapshotTimeZone}</span>
+          {copyStatus ? <strong>{copyStatus}</strong> : null}
+        </div>
+        <textarea
+          className="snapshot-json"
+          readOnly
+          spellCheck={false}
+          value={snapshotJson}
+          aria-label="Wind Lab debug snapshot JSON"
+        />
       </section>
 
       <section className="lab-panel face-panel">
