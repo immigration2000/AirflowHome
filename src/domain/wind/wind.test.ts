@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   meteorologicalToUnitVector,
   normalizeDegrees,
+  unitVectorToMeteorologicalDeg,
   windFromToDeg,
   windFromToUnitVector,
 } from './wind'
@@ -60,6 +61,22 @@ describe('meteorologicalToUnitVector', () => {
     const vector = meteorologicalToUnitVector(450)
     expect(vector.xEast).toBeCloseTo(1, 12)
     expect(vector.yNorth).toBeCloseTo(0, 12)
+  })
+})
+
+describe('unitVectorToMeteorologicalDeg', () => {
+  it.each([0, 45, 90, 135, 180, 225, 270, 315])(
+    'round-trips %s°',
+    (degrees) => {
+      const vector = meteorologicalToUnitVector(degrees)
+      expect(unitVectorToMeteorologicalDeg(vector)).toBeCloseTo(degrees, 12)
+    },
+  )
+
+  it('rejects a zero vector', () => {
+    expect(() =>
+      unitVectorToMeteorologicalDeg({ xEast: 0, yNorth: 0 }),
+    ).toThrow(RangeError)
   })
 })
 
