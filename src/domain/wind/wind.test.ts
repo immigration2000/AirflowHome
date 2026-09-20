@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { normalizeDegrees, windFromToDeg } from './wind'
+import {
+  meteorologicalToUnitVector,
+  normalizeDegrees,
+  windFromToDeg,
+  windFromToUnitVector,
+} from './wind'
 
 describe('normalizeDegrees', () => {
   it.each([
@@ -33,5 +38,35 @@ describe('windFromToDeg', () => {
       expect(result).toBeGreaterThanOrEqual(0)
       expect(result).toBeLessThan(360)
     }
+  })
+})
+
+describe('meteorologicalToUnitVector', () => {
+  it.each([
+    [0, 0, 1],
+    [90, 1, 0],
+    [180, 0, -1],
+    [270, -1, 0],
+    [45, Math.SQRT1_2, Math.SQRT1_2],
+  ])('maps TO %s° to +X East / +Y North', (degrees, xEast, yNorth) => {
+    const vector = meteorologicalToUnitVector(degrees)
+
+    expect(vector.xEast).toBeCloseTo(xEast, 12)
+    expect(vector.yNorth).toBeCloseTo(yNorth, 12)
+    expect(Math.hypot(vector.xEast, vector.yNorth)).toBeCloseTo(1, 12)
+  })
+
+  it('normalizes angles before conversion', () => {
+    const vector = meteorologicalToUnitVector(450)
+    expect(vector.xEast).toBeCloseTo(1, 12)
+    expect(vector.yNorth).toBeCloseTo(0, 12)
+  })
+})
+
+describe('windFromToUnitVector', () => {
+  it('converts a north wind FROM 0° into a southward flow vector', () => {
+    const vector = windFromToUnitVector(0)
+    expect(vector.xEast).toBeCloseTo(0, 12)
+    expect(vector.yNorth).toBeCloseTo(-1, 12)
   })
 })
