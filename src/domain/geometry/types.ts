@@ -68,27 +68,27 @@ function segmentsIntersect(
   bStart: LocalMeterPoint,
   bEnd: LocalMeterPoint,
 ): boolean {
-  const tolerance = NUMERICAL_TOLERANCES.geometryMeters
+  const orientationTolerance = NUMERICAL_TOLERANCES.polygonAreaSquareMeters
   const abC = cross(aStart, aEnd, bStart)
   const abD = cross(aStart, aEnd, bEnd)
   const cdA = cross(bStart, bEnd, aStart)
   const cdB = cross(bStart, bEnd, aEnd)
 
   const oppositeSides =
-    ((abC > tolerance && abD < -tolerance) ||
-      (abC < -tolerance && abD > tolerance)) &&
-    ((cdA > tolerance && cdB < -tolerance) ||
-      (cdA < -tolerance && cdB > tolerance))
+    ((abC > orientationTolerance && abD < -orientationTolerance) ||
+      (abC < -orientationTolerance && abD > orientationTolerance)) &&
+    ((cdA > orientationTolerance && cdB < -orientationTolerance) ||
+      (cdA < -orientationTolerance && cdB > orientationTolerance))
 
   if (oppositeSides) {
     return true
   }
 
   return (
-    (Math.abs(abC) <= tolerance && pointOnSegment(bStart, aStart, aEnd)) ||
-    (Math.abs(abD) <= tolerance && pointOnSegment(bEnd, aStart, aEnd)) ||
-    (Math.abs(cdA) <= tolerance && pointOnSegment(aStart, bStart, bEnd)) ||
-    (Math.abs(cdB) <= tolerance && pointOnSegment(aEnd, bStart, bEnd))
+    (Math.abs(abC) <= orientationTolerance && pointOnSegment(bStart, aStart, aEnd)) ||
+    (Math.abs(abD) <= orientationTolerance && pointOnSegment(bEnd, aStart, aEnd)) ||
+    (Math.abs(cdA) <= orientationTolerance && pointOnSegment(aStart, bStart, bEnd)) ||
+    (Math.abs(cdB) <= orientationTolerance && pointOnSegment(aEnd, bStart, bEnd))
   )
 }
 
