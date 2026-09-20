@@ -1,53 +1,49 @@
 # Current Development State
 
 ## Current Milestone
-M0.5 — Wind Lab
+M0.6 — Validation & Snapshot Foundation
 
 ## Status
-M0.4 Domain Contract gate passed in GitHub Actions. Core runtime validation, coordinate, wind-vector, numerical, issue, provenance, time/freshness, confidence, and model-capability contracts are implemented and tested.
+M0.5 Wind Lab gate passed in GitHub Actions. The provider-free developer surface now verifies meteorological direction, world vectors, local-meter geometry, deterministic presets, and building-face outward normals.
 
 ## Completed
-- project architecture/rules documented,
 - reproducible npm/CI foundation verified,
-- Zod runtime-validation primitives added,
-- explicit GeoPoint / LocalMeterPoint / ScreenPoint / WorldVector2 contracts added,
-- canonical meteorological FROM → TO conversion tested,
-- canonical meteorological angle → +X East / +Y North unit-vector conversion implemented and tested,
-- normalized WeatherWind runtime boundary parser added,
-- named numerical tolerances added,
-- Error / Warning / Limitation issue kinds added,
-- provenance + temporal + freshness + confidence contracts added,
-- model version/capability contracts added,
-- wind-driven v1 capabilities explicitly exclude buoyancy, terrain, CFD turbulence, and mechanical HVAC,
-- local polygon signed-area and explicit counter-clockwise canonical-winding contract added,
-- M0.4 test suite passes in GitHub Actions.
+- M0.4 runtime/domain contracts implemented and tested,
+- /dev/wind-lab developer route added,
+- editable mock wind FROM direction and speed added,
+- derived TO direction and +X East / +Y North vector displayed,
+- deterministic Wind Lab scenario presets added,
+- canonical CCW local-meter building polygons visualized,
+- building faces and outward normals derived and displayed,
+- vector ↔ meteorological direction tests added,
+- rectangular face-normal golden tests added,
+- deterministic scenario tests added,
+- no live provider dependency introduced.
 
 ## Current Task
-**LAB-001 — Implement M0.5 Wind Lab**
+**VALIDATION-001 — Implement M0.6 Validation & Snapshot Foundation**
 
-Create a developer-only Wind Lab using mock data only.
-
-Required scope:
-- editable mock wind FROM direction and speed,
-- display derived TO direction and +X East / +Y North flow vector,
-- simple local-meter building polygon,
-- inspectable face directions/normals,
-- deterministic scenario presets,
-- no live map/weather/provider dependency.
+Implement:
+- versioned simulation/debug snapshot schema,
+- deterministic snapshot import/export contract,
+- stronger geometry validation including self-intersection detection,
+- explicit time context in snapshots,
+- confidence-component representation,
+- sensitivity/invariant scenario foundation.
 
 ## Exit Criteria
-M0.5 must satisfy the Wind Lab gate in `docs/MILESTONE_GATES.md` before M0.6 starts.
+M0.6 must satisfy the Validation/Snapshot gate in `docs/MILESTONE_GATES.md` before provider feasibility work begins.
 
 ## Next Task
-After M0.5 passes:
+After M0.6 passes:
 
-**M0.6 — Validation & Snapshot Foundation**
+**M0.7 — Provider Feasibility Spike**
 
-Add versioned snapshots, stronger geometry validation, deterministic debug export, confidence breakdown, and sensitivity/invariant scenarios.
+Evaluate real Korean address/building/weather data coverage, license, freshness, quota, and fallback paths before committing to production provider architecture.
 
 ## Do Not Start Yet
-- live map provider,
-- live weather API,
+- live map provider integration,
+- live weather API integration,
 - surrounding-building physics,
 - floorplan work,
 - indoor airflow,
@@ -56,7 +52,7 @@ Add versioned snapshots, stronger geometry validation, deterministic debug expor
 
 ## Known Limitations
 - repository-level branch protection/ruleset still needs to be enabled in GitHub settings,
-- polygon self-intersection validation is intentionally deferred to M0.6,
+- polygon self-intersection validation is deferred to the active M0.6 task,
+- versioned snapshot/debug export is not implemented yet,
 - local geographic projection is not implemented yet,
-- provider API keys are intentionally not configured,
-- current app UI is still a foundation smoke screen until LAB-001 is implemented.
+- provider API keys are intentionally not configured.
