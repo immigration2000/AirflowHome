@@ -1,10 +1,10 @@
 # Current Development State
 
 ## Current Milestone
-M0 — Autonomous Development Foundation
+M0.4 — Domain Contract
 
 ## Status
-Repository bootstrap files are merged to `main`. Local Claude Code bootstrap and executable verification are still required before advancing.
+M0 foundation gate passed in GitHub Actions. The repository now has a committed lockfile, reproducible CI install, doctor checks, and a passing verification pipeline.
 
 ## Completed
 - project architecture/rules documented,
@@ -12,25 +12,15 @@ Repository bootstrap files are merged to `main`. Local Claude Code bootstrap and
 - React + TypeScript + Vite foundation defined,
 - Vitest wind-domain tests added,
 - bootstrap/doctor/verify commands defined,
-- GitHub Actions verification workflow defined,
-- roadmap hardened with Domain Contract, Validation/Snapshot, Provider Feasibility, and Outdoor Validation Gate stages.
+- `package-lock.json` generated and committed,
+- bootstrap uses `npm ci` when the lockfile exists,
+- GitHub Actions uses `npm ci` with npm cache,
+- CI runs `npm run doctor` and `npm run verify`,
+- typecheck/lint/tests/build all pass in CI,
+- roadmap includes Domain Contract, Validation/Snapshot, Provider Feasibility, and Outdoor Validation Gate stages.
 
 ## Current Task
-**BOOT-002 — Validate and lock the foundation locally**
-
-Claude Code should:
-1. read README, CLAUDE.md, CURRENT_STATE, and MILESTONE_GATES,
-2. on a fresh clone run `npm run bootstrap`,
-3. confirm `npm run verify` succeeds,
-4. keep the generated `package-lock.json`,
-5. change CI/install paths to `npm ci` where a lockfile is available,
-6. fix foundation-only issues without starting M0.4 prematurely,
-7. update this document with the actual verification result.
-
-## Next Task
-After the M0 gate succeeds:
-
-**DOMAIN-001 — Start M0.4 Domain Contract**
+**DOMAIN-001 — Implement M0.4 Domain Contract**
 
 Implement/validate:
 - runtime schemas at external/file boundaries,
@@ -40,10 +30,17 @@ Implement/validate:
 - error/warning/limitation contracts,
 - provenance/time/freshness/confidence/model-capability contracts.
 
-Do not start Wind Lab until the M0.4 gate is satisfied.
+## Exit Criteria
+M0.4 must satisfy the Domain Contract gate in `docs/MILESTONE_GATES.md` before Wind Lab work starts.
+
+## Next Task
+After M0.4 passes:
+
+**LAB-001 — Start M0.5 Wind Lab**
+
+Use mock data only. Do not add live providers yet.
 
 ## Do Not Start Yet
-- Wind Lab implementation,
 - live map provider,
 - live weather API,
 - surrounding-building simulation,
@@ -53,8 +50,7 @@ Do not start Wind Lab until the M0.4 gate is satisfied.
 - heat-source placement.
 
 ## Known Limitations
-- no lockfile exists until the first successful local bootstrap,
-- CI has not yet been proven with a generated lockfile,
+- repository-level branch protection/ruleset still needs to be enabled in GitHub settings,
 - provider API keys are intentionally not configured,
 - current UI is only a repository-foundation smoke screen,
-- domain runtime-validation/vector/geometry contracts are planned but not yet implemented.
+- domain runtime-validation/vector/geometry contracts are not yet implemented.

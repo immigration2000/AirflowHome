@@ -19,15 +19,20 @@ for (const file of [
   'docs/UNITS.md',
   'docs/TESTING.md',
   'docs/TOOLING.md',
+  'docs/MILESTONE_GATES.md',
+  'docs/VALIDATION_PLAN.md',
+  'docs/DATA_POLICY.md',
 ]) {
   check(file, existsSync(file))
 }
 
 check('package.json', existsSync('package.json'))
+check('package-lock.json', existsSync('package-lock.json'))
 
 if (existsSync('package.json')) {
   const pkg = JSON.parse(readFileSync('package.json', 'utf8'))
   check('verify script', typeof pkg.scripts?.verify === 'string')
+  check('packageManager pinned', typeof pkg.packageManager === 'string')
 }
 
 check('dependencies installed', existsSync('node_modules'))
