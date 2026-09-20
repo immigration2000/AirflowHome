@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 
 const [major] = process.versions.node.split('.').map(Number)
@@ -20,8 +21,15 @@ function run(args) {
   }
 }
 
-console.log('Installing dependencies...')
-run(['install'])
+const hasLockfile = existsSync('package-lock.json')
+
+console.log(
+  hasLockfile
+    ? 'Installing reproducibly from package-lock.json...'
+    : 'No package-lock.json found; creating initial dependency lock...',
+)
+
+run(hasLockfile ? ['ci'] : ['install'])
 
 console.log('Running repository doctor...')
 run(['run', 'doctor'])

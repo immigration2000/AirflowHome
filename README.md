@@ -11,21 +11,18 @@ When opening this repository in Claude Code:
 1. Read `CLAUDE.md`.
 2. Read `docs/CURRENT_STATE.md`.
 3. Read the active milestone in `docs/ROADMAP.md`.
-4. Read the architecture/domain/coordinate/unit rules referenced by `CLAUDE.md`.
-5. Run:
-   ```bash
-   npm run doctor
-   ```
-6. On a fresh clone, run:
+4. Read `docs/MILESTONE_GATES.md` and the architecture/domain rules referenced by `CLAUDE.md`.
+5. On a fresh clone, run:
    ```bash
    npm run bootstrap
    ```
-7. Before and after implementation, run:
+6. On an already bootstrapped clone, run:
    ```bash
+   npm run doctor
    npm run verify
    ```
 
-Do not start a future milestone unless `docs/CURRENT_STATE.md` activates it.
+Do not start a future milestone unless `docs/CURRENT_STATE.md` activates it and the current milestone gate is satisfied.
 
 ## Current State
 
@@ -36,20 +33,23 @@ See [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) for the exact active task and
 ## Core Principles
 
 - UI does not contain physics.
-- External provider data enters through adapters.
-- Wind FROM/TO direction must never be ambiguous.
+- External provider/file data is runtime-validated before entering the domain.
+- Wind FROM/TO direction and vector conversion must never be ambiguous.
+- World axes use +X East / +Y North.
 - Screen pixels never enter physical calculations.
-- Internal physics uses SI units.
-- Missing physical data is not silently replaced.
+- Internal physics uses SI units and full calculation precision.
+- Missing, estimated, stale, and unsupported data are never silently treated as known.
 - Same simulation input + same model version must produce the same result.
 - Physics/scoring changes require regression tests and version review.
+- Initial ventilation modeling is wind-driven; unsupported physics must be declared.
 - Automatic floorplan recognition comes after the manual editor and solver are validated.
+- The product is local-first and should minimize storage of exact residence/floorplan data.
 
 ## Development Commands
 
 ```bash
-npm run bootstrap   # install dependencies, doctor, verify
-npm run doctor      # repository/environment sanity checks
+npm run bootstrap   # fresh clone: install dependencies, doctor, verify
+npm run doctor      # bootstrapped environment sanity checks
 npm run dev         # Vite dev server
 npm run test:run    # deterministic test run
 npm run verify      # typecheck + lint + tests + production build
@@ -59,11 +59,15 @@ npm run verify      # typecheck + lint + tests + production build
 
 ```text
 Foundation
+→ Domain Contract
 → Wind Lab
+→ Validation/Snapshot
+→ Provider Feasibility
 → Map / Address
 → Weather
 → Building / Residence
 → Outdoor Wind Model
+→ Outdoor Validation Gate
 → Outdoor MVP
 → Manual Floorplan Editor
 → Airflow Lab
@@ -81,4 +85,4 @@ Detailed planning lives in [docs/ROADMAP.md](docs/ROADMAP.md).
 
 AirflowHome starts with simplified, explainable and testable models. Early results are relative/estimated ventilation guidance, not CFD-grade exact local airflow.
 
-Unsupported or incomplete input should reduce confidence or produce a warning instead of fabricated precision.
+Unsupported or incomplete input should reduce confidence, produce a warning/limitation, or block calculation instead of fabricating precision.
