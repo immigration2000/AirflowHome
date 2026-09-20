@@ -26,7 +26,7 @@ Do not start a future milestone unless `docs/CURRENT_STATE.md` activates it and 
 
 ## Current State
 
-The repository is currently in **M0 — Autonomous Development Foundation**.
+The repository is currently in **M0.7 — Provider Feasibility Spike**.
 
 See [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) for the exact active task and known limitations.
 
