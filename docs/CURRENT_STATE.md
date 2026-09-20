@@ -4,7 +4,7 @@
 M0 — Autonomous Development Foundation
 
 ## Status
-Repository bootstrap files are prepared on the setup branch. Local dependency installation and CI verification are the next validation steps.
+Repository bootstrap files are merged to `main`. Local Claude Code bootstrap and executable verification are the next validation steps.
 
 ## Completed
 - project architecture/rules documented,
