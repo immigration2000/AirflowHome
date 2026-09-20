@@ -4,7 +4,7 @@
 M0.7 — Provider Feasibility Spike
 
 ## Status
-M0.6 Validation/Snapshot gate passed. Initial M0.7 desk research is documented in `docs/PROVIDERS.md`. Production provider selection is intentionally still open because representative live-key sample testing has not yet been completed.
+M0.6 Validation/Snapshot gate passed. Initial M0.7 desk research is documented in `docs/PROVIDERS.md`. Production provider selection is intentionally still open because representative live-key sample testing has not yet been completed. Local credential placeholders and a secret-safe readiness checker are now prepared for that work.
 
 ## Completed
 - reproducible npm/CI foundation verified,
@@ -19,14 +19,17 @@ M0.6 Validation/Snapshot gate passed. Initial M0.7 desk research is documented i
 - GIS Building Integrated Information identified as the primary building-footprint candidate,
 - BuildingHUB identified as the primary height/floor metadata candidate,
 - KMA Short-term Forecast identified as the primary weather candidate,
-- AirKorea classified as an optional recommendation-layer provider rather than physics input.
+- AirKorea classified as an optional recommendation-layer provider rather than physics input,
+- `.env.example` provider credential placeholders added,
+- `npm run provider:doctor` added to check live-test readiness without printing secrets,
+- provider access/setup procedure documented in `docs/PROVIDER_ACCESS_SETUP.md`.
 
 ## Current Task
 **PROVIDER-001 — Complete live provider feasibility validation**
 
 Desk research is complete enough to define the live tests. Remaining work:
 
-1. obtain/enable development access for the candidate APIs,
+1. copy `.env.example` to `.env.local`, obtain/enable development access for the candidate APIs, and make `npm run provider:doctor` pass,
 2. run sanitized representative apartment/building samples,
 3. prove a stable GIS Building Integrated Information ↔ BuildingHUB join,
 4. verify WFS CRS/geometry/freshness in live responses,
