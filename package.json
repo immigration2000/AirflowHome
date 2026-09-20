@@ -15,7 +15,8 @@
     "test:run": "vitest run",
     "doctor": "node scripts/doctor.mjs",
     "bootstrap": "node scripts/bootstrap.mjs",
-    "verify": "npm run typecheck && npm run lint && npm run test:run && npm run build"
+    "verify": "npm run typecheck && npm run lint && npm run test:run && npm run build",
+    "provider:doctor": "node scripts/provider-doctor.mjs"
   },
   "dependencies": {
     "react": "^19.1.1",
