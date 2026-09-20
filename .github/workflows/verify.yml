@@ -26,5 +26,8 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Doctor
+        run: npm run doctor
+
       - name: Verify
         run: npm run verify
