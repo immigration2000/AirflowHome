@@ -8,7 +8,7 @@ export const NUMERICAL_TOLERANCES = Object.freeze({
 export function approximatelyEqual(
   left: number,
   right: number,
-  tolerance = NUMERICAL_TOLERANCES.scalar,
+  tolerance: number = NUMERICAL_TOLERANCES.scalar,
 ): boolean {
   if (!Number.isFinite(left) || !Number.isFinite(right)) {
     return false
